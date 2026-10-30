@@ -4,7 +4,7 @@
  * Context: Kenya (Ksh, 16% VAT, eTIMS, M-Pesa, Multi-Branch)
  */
 
-export type Role = 'owner' | 'manager' | 'cashier' | 'storekeeper' | 'dispatcher';
+export type Role = 'owner' | 'cashier';
 
 export interface User {
   id: string;
@@ -213,12 +213,23 @@ export interface SaleItem {
   unit: string;
   baseUnitQuantity: number; // e.g. 2 tonnes = 40 bags
   soldQuantity: number; // e.g. 2
+  discountKsh: number; // absolute amount in Ksh
   unitPrice: number; // price for this sold unit
   costPriceAtSale: number;
-  discountAmount: number;
+  lineDiscountAmount: number;
   taxRate: number;
   taxAmount: number;
   total: number;
+}
+
+export interface CartItem {
+  product: Product;
+  selectedUnit: string;
+  quantity: number;
+  discountKsh: number; // amount in Ksh
+  unitPrice: number;
+  lineDiscountAmount: number; // line discount
+  taxRate: number;
 }
 
 export interface PaymentEntry {

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar.tsx';
 import { POSScreen, CartItem } from './components/POSScreen.tsx';
 import { InventoryScreen } from './components/InventoryScreen.tsx';
-import { PurchasingScreen } from './components/PurchasingScreen.tsx';
 import { CustomersScreen } from './components/CustomersScreen.tsx';
 import { ReportsScreen } from './components/ReportsScreen.tsx';
 import { ScaleUpScreen } from './components/ScaleUpScreen.tsx';
 import { ArchitectureDocs } from './components/ArchitectureDocs.tsx';
 import { TestsRunnerScreen } from './components/TestsRunnerScreen.tsx';
 import { TillModal } from './components/TillModal.tsx';
+import { LoginScreen } from './components/LoginScreen.tsx';
+import { FinanceScreen } from './components/FinanceScreen.tsx';
 import {
   Product,
   Customer,
@@ -68,6 +69,7 @@ export default function App() {
   const [approvals, setApprovals] = useState<ApprovalRequest[]>(defaultApprovals);
   const [activeTill, setActiveTill] = useState<TillSession | undefined>(defaultTills[0]);
   const [featureFlags, setFeatureFlags] = useState<FeatureFlags>(defaultFlags);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
 
   // Connectivity & Offline Queue
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
@@ -185,20 +187,29 @@ export default function App() {
       cashierId: currentUser.id,
       cashierName: currentUser.name,
       date: new Date().toISOString(),
-      items: cartItems.map(it => ({
-        productId: it.product.id,
-        sku: it.product.sku,
-        name: it.product.name,
-        unit: it.selectedUnit,
-        soldQuantity: it.quantity,
-        baseUnitQuantity: it.quantity,
-        unitPrice: it.unitPrice,
-        costPriceAtSale: it.product.costPrice,
-        discountAmount: it.discount,
-        taxRate: it.taxRate,
-        taxAmount: (it.quantity * it.unitPrice) * 0.16 / 1.16,
-        total: (it.quantity * it.unitPrice) - it.discount
-      })),
+      items: cartItems.map(it => {
+        const unitDef = it.product.availableUnits.find(u => u.unit === it.selectedUnit);
+        const factor = unitDef?.conversionFactor || 1;
+        const discountQty = it.discountQuantity || 0;
+        const totalPhysicalQty = it.quantity + discountQty;
+        const baseQty = totalPhysicalQty * factor;
+        const lineTotal = (it.quantity * it.unitPrice) - it.discount;
+        return {
+          productId: it.product.id,
+          sku: it.product.sku,
+          name: it.product.name,
+          unit: it.selectedUnit,
+          soldQuantity: it.quantity,
+          discountQuantity: discountQty,
+          baseUnitQuantity: baseQty,
+          unitPrice: it.unitPrice,
+          costPriceAtSale: it.product.costPrice,
+          discountAmount: it.discount,
+          taxRate: it.taxRate,
+          taxAmount: (lineTotal * 0.16 / 1.16),
+          total: lineTotal
+        };
+      }),
       subtotal: cartItems.reduce((acc, it) => acc + (it.quantity * it.unitPrice / 1.16), 0),
       discountTotal: cartItems.reduce((acc, it) => acc + it.discount, 0),
       taxTotal: cartItems.reduce((acc, it) => acc + ((it.quantity * it.unitPrice) * 0.16 / 1.16), 0),
@@ -220,8 +231,20 @@ export default function App() {
   const activeBranch = branches.find(b => b.id === activeBranchId) || branches[0];
   const pendingApprovalsCount = approvals.filter(a => a.status === 'pending').length;
 
+  if (!isLoggedIn) {
+    return (
+      <LoginScreen
+        onLogin={user => {
+          setCurrentUser(user);
+          setCurrentRole(user.role);
+          setIsLoggedIn(true);
+        }}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-sky-500 selection:text-white">
       {/* Persistent Global Navbar */}
       <Navbar
         activeTab={activeTab}
@@ -240,6 +263,7 @@ export default function App() {
         activeTill={activeTill}
         onOpenTillModal={() => setShowTillModal(true)}
         pendingApprovalsCount={pendingApprovalsCount}
+        onLogout={() => setIsLoggedIn(false)}
       />
 
       {/* Main View Area */}
@@ -248,6 +272,7 @@ export default function App() {
           <POSScreen
             products={products}
             customers={customers}
+            sales={sales}
             activeBranch={activeBranch}
             currentUser={currentUser}
             activeTill={activeTill}
@@ -277,12 +302,14 @@ export default function App() {
           />
         )}
 
-        {activeTab === 'purchasing' && (
-          <PurchasingScreen
+
+
+        {activeTab === 'finance' && (
+          <FinanceScreen
+            sales={sales}
+            customers={customers}
             suppliers={suppliers}
-            purchaseOrders={purchaseOrders}
             goodsReceivedNotes={goodsReceivedNotes}
-            products={products}
             activeBranch={activeBranch}
             currentUser={currentUser}
             onRefreshData={fetchAllData}

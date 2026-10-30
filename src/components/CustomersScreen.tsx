@@ -142,18 +142,18 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-80px)] overflow-hidden bg-slate-950">
+    <div className="flex-1 flex flex-col lg:flex-row min-h-[calc(100vh-80px)] lg:h-[calc(100vh-80px)] overflow-y-auto lg:overflow-hidden bg-slate-50 text-slate-900">
       {/* LEFT: Customer List & Search (35% width) */}
-      <div className="w-full lg:w-80 xl:w-96 flex flex-col border-r border-slate-800 bg-slate-900 overflow-hidden">
-        <div className="p-3.5 border-b border-slate-800 space-y-2">
+      <div className="w-full lg:w-80 xl:w-96 flex flex-col border-b lg:border-b-0 lg:border-r border-sky-100 bg-white shrink-0 max-h-[350px] lg:max-h-none overflow-hidden">
+        <div className="p-3.5 border-b border-sky-100 space-y-2 bg-sky-50/50">
           <div className="flex justify-between items-center">
-            <h3 className="font-bold text-white text-sm flex items-center gap-2">
-              <Users className="w-4 h-4 text-amber-500" />
+            <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <Users className="w-4 h-4 text-sky-600" />
               <span>Customers & Contractors</span>
             </h3>
             <button
               onClick={() => setShowNewCustModal(true)}
-              className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-2 py-1 rounded text-xs font-bold transition flex items-center gap-1"
+              className="bg-sky-600 hover:bg-sky-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New</span>
@@ -165,11 +165,11 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
             placeholder="Search name, phone, KRA PIN..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+            className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 font-medium"
           />
         </div>
 
-        <div className="flex-1 overflow-y-auto divide-y divide-slate-800">
+        <div className="flex-1 overflow-y-auto divide-y divide-sky-100">
           {filteredCustomers.map(cust => {
             const isSelected = cust.id === selectedCustomer?.id;
             const hasBalance = cust.currentBalance > 0;
@@ -178,26 +178,26 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
                 key={cust.id}
                 onClick={() => setSelectedCustomerId(cust.id)}
                 className={`p-3 cursor-pointer transition select-none ${
-                  isSelected ? 'bg-amber-500/10 border-l-4 border-amber-500' : 'hover:bg-slate-850'
+                  isSelected ? 'bg-sky-100/70 border-l-4 border-sky-600 font-semibold' : 'hover:bg-sky-50/50'
                 }`}
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h4 className="font-bold text-xs text-white">{cust.name}</h4>
-                    <span className="text-[10px] text-slate-400">{cust.phone}</span>
+                    <h4 className="font-bold text-xs text-slate-900">{cust.name}</h4>
+                    <span className="text-[10px] text-slate-500">{cust.phone}</span>
                   </div>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded uppercase font-semibold ${
-                    cust.type === 'contractor' ? 'bg-purple-950/60 text-purple-300 border border-purple-800' : 'bg-slate-800 text-slate-400'
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded uppercase font-bold ${
+                    cust.type === 'contractor' ? 'bg-purple-50 text-purple-800 border border-purple-200' : 'bg-slate-100 text-slate-600 border border-slate-200'
                   }`}>
                     {cust.type}
                   </span>
                 </div>
 
                 <div className="mt-2 flex justify-between items-center text-xs">
-                  <span className="text-slate-400 text-[11px]">
+                  <span className="text-slate-500 text-[11px] font-medium">
                     Limit: {formatKsh(cust.creditLimit)}
                   </span>
-                  <span className={`font-mono font-bold ${hasBalance ? 'text-red-400' : 'text-emerald-400'}`}>
+                  <span className={`font-mono font-black ${hasBalance ? 'text-rose-600' : 'text-emerald-700'}`}>
                     {formatKsh(cust.currentBalance)}
                   </span>
                 </div>
@@ -212,28 +212,28 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
         {selectedCustomer ? (
           <>
             {/* Customer Details & Header Card */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="bg-white border border-sky-100 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-xs">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-extrabold text-white">{selectedCustomer.name}</h2>
-                  <span className="text-xs bg-slate-800 text-slate-300 font-mono px-2 py-0.5 rounded">
+                  <h2 className="text-lg font-extrabold text-slate-900">{selectedCustomer.name}</h2>
+                  <span className="text-xs bg-sky-50 text-sky-800 font-mono font-bold px-2 py-0.5 rounded border border-sky-200">
                     {selectedCustomer.code}
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400 mt-1">
-                  <span>Phone: <b className="text-slate-200">{selectedCustomer.phone}</b></span>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 font-medium mt-1">
+                  <span>Phone: <b className="text-slate-900">{selectedCustomer.phone}</b></span>
                   {selectedCustomer.kraPin && (
-                    <span>KRA PIN: <b className="text-amber-400 font-mono">{selectedCustomer.kraPin}</b></span>
+                    <span>KRA PIN: <b className="text-sky-700 font-mono font-bold">{selectedCustomer.kraPin}</b></span>
                   )}
                   <span>Address: {selectedCustomer.address || 'N/A'}</span>
-                  <span>Terms: <b className="text-cyan-300">{selectedCustomer.creditPeriodDays} Days Net</b></span>
+                  <span>Terms: <b className="text-sky-800">{selectedCustomer.creditPeriodDays} Days Net</b></span>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <div className="text-xs text-slate-400">Current Balance Owed:</div>
-                  <div className="text-xl font-extrabold text-red-400 font-mono">
+                  <div className="text-xs text-slate-500 font-medium">Current Balance Owed:</div>
+                  <div className="text-xl font-black text-rose-600 font-mono">
                     {formatKsh(selectedCustomer.currentBalance)}
                   </div>
                 </div>
@@ -244,7 +244,7 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
                       setPaymentAmount(selectedCustomer.currentBalance);
                       setShowPaymentModal(true);
                     }}
-                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs transition shadow flex items-center gap-1.5"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-md cursor-pointer flex items-center gap-1.5"
                   >
                     <DollarSign className="w-4 h-4" />
                     <span>Receive Payment</span>
@@ -255,28 +255,28 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
 
             {/* Debtor Ageing Buckets */}
             {selectedCustomer.creditAllowed && (
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
-                <h3 className="font-bold text-xs text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-cyan-400" />
+              <div className="bg-white border border-sky-100 rounded-2xl p-4 space-y-2 shadow-xs">
+                <h3 className="font-bold text-xs text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-sky-600" />
                   <span>Debtor Ageing Analysis</span>
                 </h3>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
-                    <span className="text-slate-400 block text-[11px]">Current (0 - 30 Days):</span>
-                    <span className="text-sm font-bold text-emerald-400 font-mono">{formatKsh(ageing.current)}</span>
+                  <div className="bg-sky-50/50 p-3 rounded-xl border border-sky-100">
+                    <span className="text-slate-500 font-medium block text-[11px]">Current (0 - 30 Days):</span>
+                    <span className="text-sm font-black text-emerald-700 font-mono">{formatKsh(ageing.current)}</span>
                   </div>
-                  <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
-                    <span className="text-slate-400 block text-[11px]">31 - 60 Days:</span>
-                    <span className="text-sm font-bold text-amber-400 font-mono">{formatKsh(ageing.days30)}</span>
+                  <div className="bg-sky-50/50 p-3 rounded-xl border border-sky-100">
+                    <span className="text-slate-500 font-medium block text-[11px]">31 - 60 Days:</span>
+                    <span className="text-sm font-black text-sky-800 font-mono">{formatKsh(ageing.days30)}</span>
                   </div>
-                  <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
-                    <span className="text-slate-400 block text-[11px]">61 - 90 Days:</span>
-                    <span className="text-sm font-bold text-orange-400 font-mono">{formatKsh(ageing.days60)}</span>
+                  <div className="bg-sky-50/50 p-3 rounded-xl border border-sky-100">
+                    <span className="text-slate-500 font-medium block text-[11px]">61 - 90 Days:</span>
+                    <span className="text-sm font-black text-amber-700 font-mono">{formatKsh(ageing.days60)}</span>
                   </div>
-                  <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
-                    <span className="text-slate-400 block text-[11px]">90+ Days (Overdue):</span>
-                    <span className="text-sm font-bold text-red-400 font-mono">{formatKsh(ageing.days90Plus)}</span>
+                  <div className="bg-sky-50/50 p-3 rounded-xl border border-sky-100">
+                    <span className="text-slate-500 font-medium block text-[11px]">90+ Days (Overdue):</span>
+                    <span className="text-sm font-black text-rose-600 font-mono">{formatKsh(ageing.days90Plus)}</span>
                   </div>
                 </div>
               </div>
@@ -284,25 +284,25 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
 
             {/* Contractor Project Accounts */}
             {selectedCustomer.projects && selectedCustomer.projects.length > 0 && (
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
-                <h3 className="font-bold text-xs text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <Building className="w-4 h-4 text-purple-400" />
+              <div className="bg-white border border-sky-100 rounded-2xl p-4 space-y-2 shadow-xs">
+                <h3 className="font-bold text-xs text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                  <Building className="w-4 h-4 text-purple-600" />
                   <span>Contractor Project Accounts & Site Deliveries</span>
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {selectedCustomer.projects.map(proj => (
-                    <div key={proj.id} className="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs space-y-1.5">
+                    <div key={proj.id} className="bg-sky-50/50 p-3 rounded-xl border border-sky-100 text-xs space-y-1.5">
                       <div className="flex justify-between items-start">
-                        <div className="font-bold text-white text-sm">{proj.projectName}</div>
-                        <span className="bg-emerald-950/60 text-emerald-300 text-[10px] px-1.5 py-0.5 rounded border border-emerald-800">
+                        <div className="font-bold text-slate-900 text-sm">{proj.projectName}</div>
+                        <span className="bg-emerald-50 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded border border-emerald-200 font-bold">
                           {proj.status}
                         </span>
                       </div>
-                      <div className="text-slate-400 text-[11px]">Site: {proj.siteLocation}</div>
-                      <div className="flex justify-between pt-1 border-t border-slate-850">
-                        <span className="text-slate-400">Budget: {formatKsh(proj.allocatedBudget)}</span>
-                        <span className="font-bold text-red-400">Owed: {formatKsh(proj.currentBalance)}</span>
+                      <div className="text-slate-500 font-medium text-[11px]">Site: {proj.siteLocation}</div>
+                      <div className="flex justify-between pt-1 border-t border-sky-100 font-medium">
+                        <span className="text-slate-600">Budget: {formatKsh(proj.allocatedBudget)}</span>
+                        <span className="font-bold text-rose-600">Owed: {formatKsh(proj.currentBalance)}</span>
                       </div>
                     </div>
                   ))}
@@ -311,44 +311,44 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
             )}
 
             {/* Invoices & Statement Ledger */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 className="font-bold text-xs text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <FileText className="w-4 h-4 text-amber-400" />
+            <div className="bg-white border border-sky-100 rounded-2xl p-4 space-y-3 shadow-xs">
+              <div className="flex justify-between items-center border-b border-sky-100 pb-2">
+                <h3 className="font-bold text-xs text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                  <FileText className="w-4 h-4 text-sky-600" />
                   <span>Customer Statement & Sales History</span>
                 </h3>
-                <span className="text-xs text-slate-400">{customerSales.length} Transactions</span>
+                <span className="text-xs text-slate-500 font-medium">{customerSales.length} Transactions</span>
               </div>
 
               {customerSales.length === 0 ? (
-                <div className="p-6 text-center text-xs text-slate-500">
+                <div className="p-6 text-center text-xs text-slate-500 font-medium">
                   No sales recorded yet for this customer account.
                 </div>
               ) : (
                 <div className="space-y-2">
                   {customerSales.map(sale => (
-                    <div key={sale.id} className="p-3 bg-slate-950 rounded-lg border border-slate-800 flex justify-between items-center text-xs">
+                    <div key={sale.id} className="p-3 bg-sky-50/40 rounded-xl border border-sky-100 flex justify-between items-center text-xs">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-white">{sale.invoiceNumber}</span>
-                          <span className="text-[10px] text-slate-500">{formatDate(sale.date)}</span>
-                          <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold uppercase ${
-                            sale.paymentStatus === 'paid' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'
+                          <span className="font-bold text-slate-900">{sale.invoiceNumber}</span>
+                          <span className="text-[10px] text-slate-400 font-medium">{formatDate(sale.date)}</span>
+                          <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold uppercase ${
+                            sale.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'
                           }`}>
                             {sale.paymentStatus}
                           </span>
                         </div>
-                        <div className="text-[11px] text-slate-400 mt-1">
+                        <div className="text-[11px] text-slate-600 font-medium mt-1">
                           {sale.items.map(it => `${it.soldQuantity} ${it.unit} ${it.name}`).join(', ')}
                         </div>
                         {sale.projectName && (
-                          <div className="text-[10px] text-purple-400 mt-0.5">Project: {sale.projectName}</div>
+                          <div className="text-[10px] text-purple-700 font-semibold mt-0.5">Project: {sale.projectName}</div>
                         )}
                       </div>
 
                       <div className="text-right">
-                        <div className="font-bold text-amber-400">{formatKsh(sale.totalAmount)}</div>
-                        <div className="text-[10px] text-slate-500">KRA CU: {sale.kraControlCode}</div>
+                        <div className="font-black text-sky-700 font-mono">{formatKsh(sale.totalAmount)}</div>
+                        <div className="text-[10px] text-slate-400 font-mono">KRA CU: {sale.kraControlCode}</div>
                       </div>
                     </div>
                   ))}
@@ -357,7 +357,7 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
             </div>
           </>
         ) : (
-          <div className="h-full flex items-center justify-center text-slate-500">
+          <div className="h-full flex items-center justify-center text-slate-500 font-medium">
             Select a customer from the left column to view account ledger.
           </div>
         )}
@@ -365,18 +365,18 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
 
       {/* RECEIVE PAYMENT MODAL */}
       {showPaymentModal && selectedCustomer && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-xl w-full max-w-md p-5 space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-              <h3 className="font-bold text-white text-sm">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-sky-200 rounded-2xl w-full max-w-md p-5 space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-sky-100 pb-2">
+              <h3 className="font-bold text-slate-900 text-sm">
                 Receive Debt Payment ({selectedCustomer.name})
               </h3>
-              <button onClick={() => setShowPaymentModal(false)} className="text-slate-400 hover:text-white">✕</button>
+              <button onClick={() => setShowPaymentModal(false)} className="text-slate-400 hover:text-slate-700 cursor-pointer font-bold">✕</button>
             </div>
 
             <form onSubmit={handleRecordPayment} className="space-y-3 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">Payment Amount (Ksh):</label>
+                <label className="text-slate-700 font-semibold block mb-1">Payment Amount (Ksh):</label>
                 <input
                   type="number"
                   min="1"
@@ -384,16 +384,16 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
                   required
                   value={paymentAmount}
                   onChange={e => setPaymentAmount(parseFloat(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white font-bold text-lg font-mono text-emerald-400"
+                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-emerald-700 font-extrabold text-lg font-mono"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Payment Method:</label>
+                <label className="text-slate-700 font-semibold block mb-1">Payment Method:</label>
                 <select
                   value={paymentMethod}
                   onChange={e => setPaymentMethod(e.target.value as any)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white"
+                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 font-medium"
                 >
                   <option value="mpesa">M-Pesa (Till / Paybill)</option>
                   <option value="bank_transfer">Bank Transfer (RTGS / EFT)</option>
@@ -402,23 +402,23 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Transaction Reference (e.g. M-Pesa Code):</label>
+                <label className="text-slate-700 font-semibold block mb-1">Transaction Reference (e.g. M-Pesa Code):</label>
                 <input
                   type="text"
                   placeholder="e.g. QKD92HS81X or EFT-00918"
                   value={paymentRef}
                   onChange={e => setPaymentRef(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white font-mono uppercase"
+                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 font-mono uppercase font-bold"
                 />
               </div>
 
               {selectedCustomer.projects && selectedCustomer.projects.length > 0 && (
                 <div>
-                  <label className="text-slate-400 block mb-1">Allocate to Specific Project (Optional):</label>
+                  <label className="text-slate-700 font-semibold block mb-1">Allocate to Specific Project (Optional):</label>
                   <select
                     value={paymentProjectId}
                     onChange={e => setPaymentProjectId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white"
+                    className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 font-medium"
                   >
                     <option value="">-- Apply to General Account Balance --</option>
                     {selectedCustomer.projects.map(p => (
@@ -432,14 +432,14 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowPaymentModal(false)}
-                  className="flex-1 py-2 bg-slate-800 text-slate-300 rounded font-medium"
+                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold cursor-pointer transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingPay || paymentAmount <= 0}
-                  className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded transition disabled:opacity-40"
+                  className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition shadow-md disabled:opacity-40 cursor-pointer"
                 >
                   {isSubmittingPay ? 'Recording...' : 'Confirm Receipt'}
                 </button>
@@ -451,32 +451,32 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
 
       {/* NEW CUSTOMER MODAL */}
       {showNewCustModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-xl w-full max-w-md p-5 space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-              <h3 className="font-bold text-white text-sm">Register New Customer / Contractor</h3>
-              <button onClick={() => setShowNewCustModal(false)} className="text-slate-400 hover:text-white">✕</button>
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-sky-200 rounded-2xl w-full max-w-md p-5 space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-sky-100 pb-2">
+              <h3 className="font-bold text-slate-900 text-sm">Register New Customer / Contractor</h3>
+              <button onClick={() => setShowNewCustModal(false)} className="text-slate-400 hover:text-slate-700 cursor-pointer font-bold">✕</button>
             </div>
 
             <form onSubmit={handleCreateCustomer} className="space-y-3 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">Customer / Company Name:</label>
+                <label className="text-slate-700 font-semibold block mb-1">Customer / Company Name:</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Simba Civil Contractors Ltd"
                   value={custName}
                   onChange={e => setCustName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white"
+                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 font-medium"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Customer Type:</label>
+                <label className="text-slate-700 font-semibold block mb-1">Customer Type:</label>
                 <select
                   value={custType}
                   onChange={e => setCustType(e.target.value as any)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white"
+                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 font-medium"
                 >
                   <option value="contractor">Contractor (Credit Terms)</option>
                   <option value="developer">Property Developer (Bulk Wholesaler)</option>
@@ -486,46 +486,46 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-slate-400 block mb-1">Phone Number:</label>
+                  <label className="text-slate-700 font-semibold block mb-1">Phone Number:</label>
                   <input
                     type="text"
                     required
                     placeholder="07..."
                     value={custPhone}
                     onChange={e => setCustPhone(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white"
+                    className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 font-medium"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 block mb-1">KRA PIN:</label>
+                  <label className="text-slate-700 font-semibold block mb-1">KRA PIN:</label>
                   <input
                     type="text"
                     placeholder="P05..."
                     value={custKraPin}
                     onChange={e => setCustKraPin(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white uppercase font-mono"
+                    className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 uppercase font-mono font-bold"
                   />
                 </div>
               </div>
 
               {custType !== 'retail' && (
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-850">
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-sky-100">
                   <div>
-                    <label className="text-slate-400 block mb-1">Credit Limit (Ksh):</label>
+                    <label className="text-slate-700 font-semibold block mb-1">Credit Limit (Ksh):</label>
                     <input
                       type="number"
                       value={custCreditLimit}
                       onChange={e => setCustCreditLimit(parseFloat(e.target.value) || 0)}
-                      className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white font-mono"
+                      className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 font-mono font-bold"
                     />
                   </div>
                   <div>
-                    <label className="text-slate-400 block mb-1">Credit Period (Days):</label>
+                    <label className="text-slate-700 font-semibold block mb-1">Credit Period (Days):</label>
                     <input
                       type="number"
                       value={custTerms}
                       onChange={e => setCustTerms(parseInt(e.target.value, 10) || 30)}
-                      className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white"
+                      className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-sky-500 rounded-lg p-2 text-slate-900 font-bold"
                     />
                   </div>
                 </div>
@@ -535,14 +535,14 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowNewCustModal(false)}
-                  className="flex-1 py-2 bg-slate-800 text-slate-300 rounded font-medium"
+                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold cursor-pointer transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingCust || !custName || !custPhone}
-                  className="flex-1 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded transition disabled:opacity-40"
+                  className="flex-1 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition shadow-md shadow-sky-600/20 disabled:opacity-40 cursor-pointer"
                 >
                   {isSubmittingCust ? 'Saving...' : 'Create Customer'}
                 </button>

@@ -56,7 +56,8 @@ export function generateEscPosHex(sale: Sale, branch: Branch): string {
       const qty = `${it.soldQuantity} ${it.unit}`.padStart(7);
       const price = `${it.unitPrice}`.padStart(7);
       const tot = `${it.total}`.padStart(8);
-      return `[TEXT] ${name} ${qty} ${price} ${tot}`;
+      const discountText = it.discountQuantity && it.discountQuantity > 0 ? `\n[TEXT]   └─ DISCOUNT: +${it.discountQuantity} ${it.unit} FREE` : '';
+      return `[TEXT] ${name} ${qty} ${price} ${tot}${discountText}`;
     }),
     '[LINE] ------------------------------------------',
     `[ALIGN_RIGHT] 1B 61 02`,

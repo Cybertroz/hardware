@@ -185,7 +185,7 @@ app.post('/api/inventory/transfers', (req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
     userId: 'user-4',
     userName: dispatchedBy || 'Storekeeper',
-    userRole: 'storekeeper',
+    userRole: 'owner',
     branchId: sourceBranchId,
     action: 'DISPATCH_TRANSFER',
     module: 'transfers',
@@ -214,6 +214,84 @@ app.put('/api/inventory/transfers/:id/receive', (req: Request, res: Response) =>
   transfer.receivedAt = new Date().toISOString();
 
   res.json(transfer);
+});
+
+// ---------------------------------------------------------------------
+// M-PESA DARAJA 2.0 STK PUSH SIMULATOR
+// ---------------------------------------------------------------------
+interface STKSession {
+  checkoutRequestId: string;
+  merchantRequestId: string;
+  phone: string;
+  amount: number;
+  accountReference: string;
+  status: 'PENDING' | 'SUCCESS' | 'FAILED' | 'CANCELLED';
+  resultDesc: string;
+  mpesaReceiptNumber?: string;
+  createdAt: number;
+}
+
+const activeMpesaSessions = new Map<string, STKSession>();
+
+app.post('/api/mpesa/stkpush', (req: Request, res: Response) => {
+  const { phone, amount, accountReference } = req.body;
+  if (!phone || !amount || amount <= 0) {
+    return res.status(400).json({ error: 'Valid phone number and positive amount are required' });
+  }
+
+  const cleanPhone = phone.startsWith('0') ? '254' + phone.substring(1) : phone;
+  const checkoutRequestId = `ws_CO_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+  const merchantRequestId = `29381-92831-${Math.floor(1000 + Math.random() * 9000)}`;
+
+  const session: STKSession = {
+    checkoutRequestId,
+    merchantRequestId,
+    phone: cleanPhone,
+    amount: Number(amount),
+    accountReference: accountReference || 'JengaPro POS',
+    status: 'PENDING',
+    resultDesc: 'Customer prompted on handset. Awaiting M-Pesa PIN input...',
+    createdAt: Date.now()
+  };
+
+  activeMpesaSessions.set(checkoutRequestId, session);
+
+  // Auto-simulate M-Pesa handset prompt PIN entry after 3 seconds
+  setTimeout(() => {
+    const current = activeMpesaSessions.get(checkoutRequestId);
+    if (current && current.status === 'PENDING') {
+      const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const randomCode = 'QKD' + Math.floor(100000 + Math.random() * 900000) + alpha.charAt(Math.floor(Math.random() * 26));
+      current.status = 'SUCCESS';
+      current.mpesaReceiptNumber = randomCode;
+      current.resultDesc = `The service request is processed successfully. Receipt: ${randomCode}`;
+    }
+  }, 3000);
+
+  res.status(200).json({
+    MerchantRequestID: merchantRequestId,
+    CheckoutRequestID: checkoutRequestId,
+    ResponseCode: "0",
+    ResponseDescription: "Success. Request accepted for processing",
+    CustomerMessage: `Success. STK Push prompt sent to ${cleanPhone}`
+  });
+});
+
+app.get('/api/mpesa/query/:checkoutRequestId', (req: Request, res: Response) => {
+  const session = activeMpesaSessions.get(req.params.checkoutRequestId);
+  if (!session) {
+    return res.status(404).json({ error: 'Transaction checkout session not found or expired' });
+  }
+
+  res.json({
+    CheckoutRequestID: session.checkoutRequestId,
+    ResultCode: session.status === 'SUCCESS' ? "0" : session.status === 'PENDING' ? "PENDING" : "1",
+    ResultDesc: session.resultDesc,
+    MpesaReceiptNumber: session.mpesaReceiptNumber || null,
+    Amount: session.amount,
+    PhoneNumber: session.phone,
+    Status: session.status
+  });
 });
 
 // Sales & POS Counter

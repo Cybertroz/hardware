@@ -66,118 +66,118 @@ export const TillModal: React.FC<TillModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-700 rounded-xl w-full max-w-lg p-5 space-y-4 shadow-2xl">
-        <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+    <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white border border-sky-200 rounded-2xl w-full max-w-lg p-5 space-y-4 shadow-2xl text-slate-900">
+        <div className="flex justify-between items-center border-b border-sky-100 pb-2">
           <div>
-            <h3 className="font-bold text-white text-sm">
+            <h3 className="font-bold text-slate-900 text-sm">
               Daily Cash-Up & Till Reconciliation (Z-Report)
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Branch: {activeBranch.name} • Cashier: {activeTill?.cashierName || currentUser.name}
             </p>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white">✕</button>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
         </div>
 
         {/* Sales by Payment Method Breakdown */}
-        <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 grid grid-cols-2 gap-2 text-xs">
+        <div className="bg-sky-50/50 p-3.5 rounded-xl border border-sky-100 grid grid-cols-2 gap-2.5 text-xs">
           <div>
-            <span className="text-slate-400 block text-[11px]">Opening Cash Float:</span>
-            <span className="font-bold text-white font-mono">{formatKsh(activeTill?.openingFloat)}</span>
+            <span className="text-slate-500 block text-[11px]">Opening Cash Float:</span>
+            <span className="font-bold text-slate-900 font-mono">{formatKsh(activeTill?.openingFloat)}</span>
           </div>
           <div>
-            <span className="text-slate-400 block text-[11px]">Cash Sales:</span>
-            <span className="font-bold text-emerald-400 font-mono">{formatKsh(activeTill?.cashSales)}</span>
+            <span className="text-slate-500 block text-[11px]">Cash Sales:</span>
+            <span className="font-bold text-emerald-700 font-mono">{formatKsh(activeTill?.cashSales)}</span>
           </div>
           <div>
-            <span className="text-slate-400 block text-[11px]">M-Pesa Collections:</span>
-            <span className="font-bold text-emerald-400 font-mono">{formatKsh(activeTill?.mpesaSales)}</span>
+            <span className="text-slate-500 block text-[11px]">M-Pesa Collections:</span>
+            <span className="font-bold text-emerald-700 font-mono">{formatKsh(activeTill?.mpesaSales)}</span>
           </div>
           <div>
-            <span className="text-slate-400 block text-[11px]">Contractor Credit Sales:</span>
-            <span className="font-bold text-purple-400 font-mono">{formatKsh(activeTill?.creditSales)}</span>
+            <span className="text-slate-500 block text-[11px]">Contractor Credit Sales:</span>
+            <span className="font-bold text-purple-700 font-mono">{formatKsh(activeTill?.creditSales)}</span>
           </div>
-          <div className="col-span-2 pt-2 border-t border-slate-850 flex justify-between items-center">
-            <span className="font-bold text-slate-300">Expected Drawer Cash:</span>
-            <span className="font-extrabold text-amber-400 font-mono text-sm">{formatKsh(expectedCash)}</span>
+          <div className="col-span-2 pt-2 border-t border-sky-200 flex justify-between items-center">
+            <span className="font-bold text-slate-800">Expected Drawer Cash:</span>
+            <span className="font-extrabold text-sky-700 font-mono text-sm">{formatKsh(expectedCash)}</span>
           </div>
         </div>
 
         {/* Physical Cash Count Denominations */}
         <div className="space-y-2 text-xs">
-          <label className="font-bold text-slate-300 block">Physical Cash Drawer Count (Kenyan Notes & Coins):</label>
+          <label className="font-bold text-slate-800 block">Physical Cash Drawer Count (Kenyan Notes & Coins):</label>
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <span className="text-[10px] text-slate-400">Ksh 1,000 Notes:</span>
+              <span className="text-[10px] text-slate-500">Ksh 1,000 Notes:</span>
               <input
                 type="number"
                 min="0"
                 value={note1000 || ''}
                 onChange={e => setNote1000(parseInt(e.target.value, 10) || 0)}
-                className="w-full bg-slate-950 border border-slate-700 rounded p-1 text-white text-right font-mono"
+                className="w-full bg-white border border-sky-200 rounded-lg p-1.5 text-slate-900 text-right font-mono focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
             </div>
             <div>
-              <span className="text-[10px] text-slate-400">Ksh 500 Notes:</span>
+              <span className="text-[10px] text-slate-500">Ksh 500 Notes:</span>
               <input
                 type="number"
                 min="0"
                 value={note500 || ''}
                 onChange={e => setNote500(parseInt(e.target.value, 10) || 0)}
-                className="w-full bg-slate-950 border border-slate-700 rounded p-1 text-white text-right font-mono"
+                className="w-full bg-white border border-sky-200 rounded-lg p-1.5 text-slate-900 text-right font-mono focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
             </div>
             <div>
-              <span className="text-[10px] text-slate-400">Ksh 200 Notes:</span>
+              <span className="text-[10px] text-slate-500">Ksh 200 Notes:</span>
               <input
                 type="number"
                 min="0"
                 value={note200 || ''}
                 onChange={e => setNote200(parseInt(e.target.value, 10) || 0)}
-                className="w-full bg-slate-950 border border-slate-700 rounded p-1 text-white text-right font-mono"
+                className="w-full bg-white border border-sky-200 rounded-lg p-1.5 text-slate-900 text-right font-mono focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
             </div>
             <div>
-              <span className="text-[10px] text-slate-400">Ksh 100 Notes:</span>
+              <span className="text-[10px] text-slate-500">Ksh 100 Notes:</span>
               <input
                 type="number"
                 min="0"
                 value={note100 || ''}
                 onChange={e => setNote100(parseInt(e.target.value, 10) || 0)}
-                className="w-full bg-slate-950 border border-slate-700 rounded p-1 text-white text-right font-mono"
+                className="w-full bg-white border border-sky-200 rounded-lg p-1.5 text-slate-900 text-right font-mono focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
             </div>
             <div>
-              <span className="text-[10px] text-slate-400">Ksh 50 Notes:</span>
+              <span className="text-[10px] text-slate-500">Ksh 50 Notes:</span>
               <input
                 type="number"
                 min="0"
                 value={note50 || ''}
                 onChange={e => setNote50(parseInt(e.target.value, 10) || 0)}
-                className="w-full bg-slate-950 border border-slate-700 rounded p-1 text-white text-right font-mono"
+                className="w-full bg-white border border-sky-200 rounded-lg p-1.5 text-slate-900 text-right font-mono focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
             </div>
             <div>
-              <span className="text-[10px] text-slate-400">Coins (Ksh 20/10/5):</span>
+              <span className="text-[10px] text-slate-500">Coins (Ksh 20/10/5):</span>
               <input
                 type="number"
                 min="0"
                 value={coins || ''}
                 onChange={e => setCoins(parseFloat(e.target.value) || 0)}
-                className="w-full bg-slate-950 border border-slate-700 rounded p-1 text-white text-right font-mono"
+                className="w-full bg-white border border-sky-200 rounded-lg p-1.5 text-slate-900 text-right font-mono focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
               />
             </div>
           </div>
         </div>
 
         {/* Counted Cash & Variance Indicator */}
-        <div className={`p-3 rounded-lg border text-xs flex justify-between items-center font-bold ${
+        <div className={`p-3 rounded-xl border text-xs flex justify-between items-center font-bold ${
           cashVariance === 0
-            ? 'bg-emerald-950/40 border-emerald-700 text-emerald-300'
+            ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
             : cashVariance < 0
-            ? 'bg-red-950/40 border-red-700 text-red-300'
-            : 'bg-amber-950/40 border-amber-700 text-amber-300'
+            ? 'bg-rose-50 border-rose-200 text-rose-800'
+            : 'bg-amber-50 border-amber-200 text-amber-800'
         }`}>
           <div>
             <span>Counted Cash: {formatKsh(countedCash)}</span>
@@ -194,20 +194,20 @@ export const TillModal: React.FC<TillModalProps> = ({
         </div>
 
         <div>
-          <label className="text-slate-400 block text-xs mb-1">Supervisor Closing Notes:</label>
+          <label className="text-slate-600 block text-xs mb-1">Supervisor Closing Notes:</label>
           <input
             type="text"
             value={closingNotes}
             onChange={e => setClosingNotes(e.target.value)}
             placeholder="e.g. End of day shift balanced and verified by supervisor..."
-            className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white text-xs"
+            className="w-full bg-white border border-sky-200 rounded-lg p-2 text-slate-900 text-xs focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
           />
         </div>
 
         <div className="flex gap-2 pt-2">
           <button
             onClick={() => window.print()}
-            className="px-3 py-2 bg-slate-800 text-slate-200 rounded text-xs font-semibold flex items-center gap-1.5"
+            className="px-3.5 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print Z-Report</span>
@@ -215,7 +215,7 @@ export const TillModal: React.FC<TillModalProps> = ({
           <button
             onClick={handleCloseTill}
             disabled={isClosing}
-            className="flex-1 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded text-xs transition shadow"
+            className="flex-1 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg text-xs transition shadow-xs disabled:opacity-50"
           >
             {isClosing ? 'Closing Till...' : 'Close Till & Lock Register'}
           </button>

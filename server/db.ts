@@ -71,7 +71,7 @@ export let branches: Branch[] = [
 export let users: User[] = [
   {
     id: 'user-1',
-    name: 'James Kamau (Owner/Admin)',
+    name: 'James Kamau (Owner & Admin)',
     email: 'kamau@jengapro.co.ke',
     role: 'owner',
     branchId: 'branch-nbo-hq',
@@ -80,38 +80,11 @@ export let users: User[] = [
   },
   {
     id: 'user-2',
-    name: 'Faith Chebet (Branch Manager)',
-    email: 'chebet@jengapro.co.ke',
-    role: 'manager',
-    branchId: 'branch-nbo-hq',
-    phone: '+254 720 111 222',
-    active: true
-  },
-  {
-    id: 'user-3',
     name: 'Peter Omondi (POS Cashier)',
     email: 'omondi@jengapro.co.ke',
     role: 'cashier',
     branchId: 'branch-nbo-hq',
     phone: '+254 712 345 678',
-    active: true
-  },
-  {
-    id: 'user-4',
-    name: 'Samuel Wanyama (Storekeeper)',
-    email: 'wanyama@jengapro.co.ke',
-    role: 'storekeeper',
-    branchId: 'branch-nbo-hq',
-    phone: '+254 728 555 666',
-    active: true
-  },
-  {
-    id: 'user-5',
-    name: 'Jackson Ndung\'u (Dispatcher & Fleet)',
-    email: 'jackson@jengapro.co.ke',
-    role: 'dispatcher',
-    branchId: 'branch-nbo-hq',
-    phone: '+254 723 777 888',
     active: true
   }
 ];
@@ -742,9 +715,9 @@ export let sales: Sale[] = [
     isContractor: true,
     projectId: 'proj-apex-01',
     projectName: 'Kilimani Heights Apartments',
-    cashierId: 'user-3',
+    cashierId: 'user-2',
     cashierName: 'Peter Omondi',
-    date: '2026-10-29T14:32:00Z',
+    date: new Date().toISOString(),
     items: [
       {
         productId: 'prod-cement-tembo',
@@ -809,9 +782,9 @@ export let sales: Sale[] = [
     branchName: 'Nairobi Main Industrial Depot',
     customerName: 'Walk-in Retail Customer',
     isContractor: false,
-    cashierId: 'user-3',
+    cashierId: 'user-2',
     cashierName: 'Peter Omondi',
-    date: '2026-10-29T15:10:00Z',
+    date: new Date().toISOString(),
     items: [
       {
         productId: 'prod-paint-permaplast20',
@@ -1127,7 +1100,7 @@ export let auditLogs: AuditLog[] = [
     timestamp: '2026-10-27T16:00:00Z',
     userId: 'user-4',
     userName: 'Samuel Wanyama',
-    userRole: 'storekeeper',
+    userRole: 'owner',
     branchId: 'branch-nbo-hq',
     action: 'STOCK_ADJUSTMENT',
     module: 'inventory',
@@ -1205,6 +1178,7 @@ export function processSaleTransaction(payload: {
     productId: string;
     unit: string;
     quantity: number;
+    discountQuantity?: number;
     unitPrice: number;
     discountAmount?: number;
   }[];
@@ -1229,7 +1203,7 @@ export function processSaleTransaction(payload: {
       return { success: false, error: `Product not found: ${item.productId}` };
     }
     
-    // Convert to base unit quantity
+    // Base unit quantity deduction (no stock deduction for additional discount amount)
     const baseQty = convertProductQuantity(product, item.quantity, item.unit, product.baseUnit);
     const availableStock = product.stockByBranch[branch.id] || 0;
 
@@ -1249,9 +1223,10 @@ export function processSaleTransaction(payload: {
 
   const processedItems = payload.items.map(item => {
     const product = products.find(p => p.id === item.productId)!;
+    const manualDiscount = item.manualDiscountAmount || 0;
     const baseQty = convertProductQuantity(product, item.quantity, item.unit, product.baseUnit);
-    const lineDiscount = item.discountAmount || 0;
-    const grossPrice = (item.quantity * item.unitPrice) - lineDiscount;
+    const lineDiscount = item.lineDiscountAmount || 0;
+    const grossPrice = (item.quantity * item.unitPrice) - lineDiscount - manualDiscount;
     
     // Kenya VAT is 16%. In building materials, retail quotes are usually tax-inclusive
     const taxRate = product.taxRate || 0.16;
@@ -1268,7 +1243,7 @@ export function processSaleTransaction(payload: {
     }
 
     subtotal += lineSubtotal;
-    discountTotal += lineDiscount;
+    discountTotal += (lineDiscount + manualDiscount);
     taxTotal += taxAmount;
     totalAmount += (lineSubtotal + taxAmount);
 
@@ -1278,10 +1253,11 @@ export function processSaleTransaction(payload: {
       name: product.name,
       unit: item.unit,
       soldQuantity: item.quantity,
+      manualDiscountAmount: manualDiscount,
       baseUnitQuantity: baseQty,
       unitPrice: item.unitPrice,
       costPriceAtSale: product.costPrice,
-      discountAmount: lineDiscount,
+      lineDiscountAmount: lineDiscount,
       taxRate,
       taxAmount: Math.round(taxAmount * 100) / 100,
       total: Math.round((lineSubtotal + taxAmount) * 100) / 100
@@ -1542,7 +1518,7 @@ export function processGoodsReceipt(payload: {
     timestamp: new Date().toISOString(),
     userId: 'user-4',
     userName: payload.receivedBy,
-    userRole: 'storekeeper',
+    userRole: 'owner',
     branchId: branch.id,
     action: 'GOODS_RECEIVED',
     module: 'purchasing',
@@ -1627,7 +1603,7 @@ export function processStockAdjustment(payload: {
     timestamp: new Date().toISOString(),
     userId: payload.adjustedBy,
     userName: payload.adjustedByName,
-    userRole: 'storekeeper',
+    userRole: 'owner',
     branchId: branch.id,
     action: 'STOCK_ADJUSTMENT',
     module: 'inventory',
