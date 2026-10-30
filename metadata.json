@@ -1,0 +1,6 @@
+{
+  "name": "JengaPro Hardware & Building Materials Management System",
+  "description": "Enterprise multi-branch POS, inventory, contractor credit, and ERP for hardware and building-materials stores in Kenya with M-Pesa integration, multi-unit conversions, offline sync, and KRA eTIMS invoicing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
