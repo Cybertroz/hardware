@@ -1498,8 +1498,7 @@ export const POSScreen: React.FC<POSScreenProps> = ({
                 className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 cursor-pointer"
                 title="View raw ESC/POS hex commands for hardware receipt printers"
               >
-                Raw ESC/POS
-              </button>
+
             </div>
 
             {showEscPosViewer && (
