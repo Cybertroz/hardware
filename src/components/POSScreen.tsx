@@ -564,8 +564,15 @@ export const POSScreen: React.FC<POSScreenProps> = ({
       });
 
       if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Failed to process sale');
+        let errorMessage = 'Failed to process sale';
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            const errData = await response.json();
+            errorMessage = errData.error || errorMessage;
+        } else {
+            errorMessage = await response.text();
+        }
+        throw new Error(errorMessage);
       }
 
       const completedSale = await response.json();
