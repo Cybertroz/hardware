@@ -68,7 +68,7 @@ export const PWAInstallButton: React.FC = () => {
         title="Install JengaPro App on your phone or computer"
       >
         <Smartphone className="w-3.5 h-3.5" />
-        <span>Install App (APK)</span>
+        <span>Install App</span>
       </button>
 
       {showIOSModal && (

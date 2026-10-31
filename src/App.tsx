@@ -40,6 +40,7 @@ import {
   stockTransfers as defaultTransfers,
   deliveries as defaultDeliveries,
   approvals as defaultApprovals,
+  auditLogs as defaultAuditLogs,
   tillSessions as defaultTills,
   featureFlags as defaultFlags,
   users as defaultUsers
@@ -67,6 +68,7 @@ export default function App() {
   const [stockTransfers, setStockTransfers] = useState<StockTransfer[]>(defaultTransfers);
   const [deliveries, setDeliveries] = useState<Delivery[]>(defaultDeliveries);
   const [approvals, setApprovals] = useState<ApprovalRequest[]>(defaultApprovals);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(defaultAuditLogs);
   const [activeTill, setActiveTill] = useState<TillSession | undefined>(defaultTills[0]);
   const [featureFlags, setFeatureFlags] = useState<FeatureFlags>(defaultFlags);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
@@ -310,6 +312,7 @@ export default function App() {
             customers={customers}
             suppliers={suppliers}
             goodsReceivedNotes={goodsReceivedNotes}
+            auditLogs={auditLogs}
             activeBranch={activeBranch}
             currentUser={currentUser}
             onRefreshData={fetchAllData}

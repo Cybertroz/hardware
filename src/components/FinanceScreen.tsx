@@ -14,15 +14,17 @@ import {
   Download,
   Lock,
   CalendarCheck,
-  Printer
+  Printer,
+  AlertTriangle
 } from 'lucide-react';
-import { Sale, Customer, Supplier, GoodsReceivedNote, Branch, User } from '../types/index.ts';
+import { Sale, Customer, Supplier, GoodsReceivedNote, Branch, User, AuditLog } from '../types/index.ts';
 
 interface FinanceScreenProps {
   sales: Sale[];
   customers: Customer[];
   suppliers: Supplier[];
   goodsReceivedNotes: GoodsReceivedNote[];
+  auditLogs: any[];
   activeBranch: Branch;
   currentUser: User;
   onRefreshData: () => void;
@@ -43,6 +45,7 @@ export const FinanceScreen: React.FC<FinanceScreenProps> = ({
   customers,
   suppliers,
   goodsReceivedNotes,
+  auditLogs,
   activeBranch,
   currentUser,
   onRefreshData
@@ -195,7 +198,8 @@ export const FinanceScreen: React.FC<FinanceScreenProps> = ({
     { id: 'cashflow', label: 'Cash Flow & Tills', icon: DollarSign },
     { id: 'expenses', label: 'Operating Expenses', icon: Receipt },
     { id: 'debtors', label: 'Debtors & Creditors', icon: CreditCard },
-    { id: 'kra', label: 'KRA Tax Ledger', icon: ShieldCheck }
+    { id: 'kra', label: 'KRA Tax Ledger', icon: ShieldCheck },
+    { id: 'logs', label: 'API & Transaction Logs', icon: AlertTriangle }
   ];
 
   return (
@@ -677,6 +681,56 @@ export const FinanceScreen: React.FC<FinanceScreenProps> = ({
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+        {/* API & TRANSACTION LOGS TAB */}
+        {activeSubTab === 'logs' && (
+          <div className="bg-white border border-sky-100 rounded-2xl p-6 space-y-6 shadow-xs">
+            <div className="border-b border-sky-100 pb-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-amber-600" />
+                <span>Recent API & Transaction Logs</span>
+              </h2>
+              <p className="text-xs text-slate-500 font-medium">Diagnostic log of system actions, focusing on payment gateways (M-Pesa, etc.) and errors.</p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 text-slate-700 uppercase font-bold border-b border-slate-200">
+                  <tr>
+                    <th className="p-3">Timestamp</th>
+                    <th className="p-3">Module</th>
+                    <th className="p-3">Action</th>
+                    <th className="p-3">Details</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {auditLogs.slice().reverse().map(log => (
+                    <tr key={log.id} className="hover:bg-slate-50 transition">
+                      <td className="p-3 font-mono text-slate-500 whitespace-nowrap">{new Date(log.timestamp).toLocaleString()}</td>
+                      <td className="p-3 font-semibold text-slate-700">{log.module}</td>
+                      <td className="p-3 uppercase text-[10px] font-bold text-sky-700">{log.action}</td>
+                      <td className={`p-3 font-medium ${log.details.toLowerCase().includes('failed') || log.details.toLowerCase().includes('error') ? 'text-rose-600' : 'text-slate-900'}`}>{log.details}</td>
+                      <td className="p-3 text-right flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => alert(`Full Log Details:\n\n${log.details}`)}
+                          className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-[9px] font-bold hover:bg-slate-200 cursor-pointer"
+                        >
+                          View Details
+                        </button>
+                        {(log.details.toLowerCase().includes('failed') || log.details.toLowerCase().includes('error')) && (
+                          <button
+                            onClick={() => alert('Retry functionality requires implementation of payment payload reconstruction.')}
+                            className="px-2 py-1 bg-amber-100 text-amber-800 rounded text-[9px] font-bold hover:bg-amber-200 cursor-pointer"
+                          >
+                            Retry
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}

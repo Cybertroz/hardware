@@ -574,6 +574,7 @@ export const POSScreen: React.FC<POSScreenProps> = ({
         } else {
             errorMessage = await response.text();
         }
+        console.error('Sale Finalization Error:', errorMessage);
         throw new Error(errorMessage);
       }
 
@@ -585,6 +586,7 @@ export const POSScreen: React.FC<POSScreenProps> = ({
       onSaleCompleted(completedSale);
       onRefreshData();
     } catch (err: any) {
+      console.error('Caught error finalizing sale:', err);
       setPaymentError(err.message || 'Payment processing error');
     } finally {
       setIsProcessingPayment(false);

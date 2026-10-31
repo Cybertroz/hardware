@@ -24,13 +24,13 @@ export default defineConfig(() => {
           scope: '/',
           icons: [
             {
-              src: 'https://images.unsplash.com/photo-1541888946425-d0fbb18f1f7d?w=192&h=192&fit=crop',
+              src: '/pwa-512x512.png',
               sizes: '192x192',
               type: 'image/png',
               purpose: 'any'
             },
             {
-              src: 'https://images.unsplash.com/photo-1541888946425-d0fbb18f1f7d?w=512&h=512&fit=crop',
+              src: '/pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any'
