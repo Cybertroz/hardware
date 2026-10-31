@@ -1145,14 +1145,14 @@ export const POSScreen: React.FC<POSScreenProps> = ({
                   <span>Cash:</span>
                 </div>
                 <div className="flex-1 flex gap-2">
-                  <input
-                    type="number"
-                    min="0"
-                    placeholder="Amount Ksh"
-                    value={cashAmount || ''}
-                    onChange={e => setCashAmount(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-white border border-slate-300 rounded-md px-2.5 py-1.5 text-slate-900 font-bold text-right focus:outline-none focus:border-sky-500"
-                  />
+                    <input
+                      type="number"
+                      min="0"
+                      placeholder="Amount Ksh"
+                      value={cashAmount || ''}
+                      onChange={e => setCashAmount(e.target.value === '' ? 0 : parseFloat(e.target.value) || 0)}
+                      className="w-full bg-white border border-slate-300 rounded-md px-2.5 py-1.5 text-slate-900 font-bold text-right focus:outline-none focus:border-sky-500"
+                    />
                   {cashAmount > 0 && (
                     <input
                       type="number"
@@ -1184,7 +1184,7 @@ export const POSScreen: React.FC<POSScreenProps> = ({
                       min="0"
                       placeholder="Amount Ksh"
                       value={mpesaAmount || ''}
-                      onChange={e => setMpesaAmount(parseFloat(e.target.value) || 0)}
+                      onChange={e => setMpesaAmount(e.target.value === '' ? 0 : parseFloat(e.target.value) || 0)}
                       className="w-full bg-white border border-slate-300 rounded-md px-2.5 py-1.5 text-slate-900 font-bold text-right focus:outline-none focus:border-sky-500"
                     />
                     <input
