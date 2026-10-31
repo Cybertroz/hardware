@@ -410,8 +410,13 @@ export const POSScreen: React.FC<POSScreenProps> = ({
   const handleFinalizeSale = async () => {
     const totalPaymentsEntered = cashAmount + mpesaAmount + cardAmount + bankAmount + creditAmount;
     
+    // Check if total payments exactly match (or are within rounding tolerance)
     if (Math.abs(totalPaymentsEntered - totalAmount) > 1.0) {
-      setPaymentError(`Total payments entered (Ksh ${totalPaymentsEntered.toLocaleString()}) does not match sale total (Ksh ${totalAmount.toLocaleString()}). Difference: Ksh ${(totalAmount - totalPaymentsEntered).toLocaleString()}`);
+      setPaymentError(
+        totalPaymentsEntered > totalAmount
+          ? `Overpayment error: Entered Ksh ${totalPaymentsEntered.toLocaleString()} is more than total Ksh ${totalAmount.toLocaleString()}.`
+          : `Underpayment error: Entered Ksh ${totalPaymentsEntered.toLocaleString()} is less than total Ksh ${totalAmount.toLocaleString()}.`
+      );
       return;
     }
 
