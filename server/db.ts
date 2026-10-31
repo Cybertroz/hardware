@@ -1181,6 +1181,9 @@ export function processSaleTransaction(payload: {
     discountQuantity?: number;
     unitPrice: number;
     discountAmount?: number;
+    discountKsh?: number;
+    manualDiscountAmount?: number;
+    lineDiscountAmount?: number;
   }[];
   payments: {
     method: 'cash' | 'mpesa' | 'card' | 'bank_transfer' | 'credit';
@@ -1223,7 +1226,7 @@ export function processSaleTransaction(payload: {
 
   const processedItems = payload.items.map(item => {
     const product = products.find(p => p.id === item.productId)!;
-    const manualDiscount = item.manualDiscountAmount || 0;
+    const manualDiscount = item.discountKsh ?? item.manualDiscountAmount ?? item.discountAmount ?? 0;
     const baseQty = convertProductQuantity(product, item.quantity, item.unit, product.baseUnit);
     const lineDiscount = item.lineDiscountAmount || 0;
     const grossPrice = (item.quantity * item.unitPrice) - lineDiscount - manualDiscount;
@@ -1253,7 +1256,9 @@ export function processSaleTransaction(payload: {
       name: product.name,
       unit: item.unit,
       soldQuantity: item.quantity,
+      discountKsh: manualDiscount,
       manualDiscountAmount: manualDiscount,
+      discountAmount: manualDiscount,
       baseUnitQuantity: baseQty,
       unitPrice: item.unitPrice,
       costPriceAtSale: product.costPrice,

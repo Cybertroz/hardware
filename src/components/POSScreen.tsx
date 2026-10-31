@@ -26,6 +26,8 @@ import { defaultPrinterConfig, generateEscPosHex } from '../utils/receiptPrinter
 import { OfflineSyncService } from '../services/offlineSync.ts';
 import { MpesaService } from '../services/mpesaService.ts';
 
+export type { CartItem };
+
 
 interface POSScreenProps {
   products: Product[];
@@ -1384,9 +1386,9 @@ export const POSScreen: React.FC<POSScreenProps> = ({
       {/* THERMAL RECEIPT & KRA eTIMS INVOICE MODAL               */}
       {/* ======================================================= */}
       {showReceiptModal && lastCompletedSale && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-sky-200 rounded-2xl w-full max-w-md p-5 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-sky-100 pb-2">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 print:p-0 print:static print:bg-white">
+          <div className="bg-white border border-sky-200 rounded-2xl w-full max-w-md p-5 space-y-4 shadow-2xl print:border-none print:shadow-none print:p-0 print:max-w-full">
+            <div className="flex items-center justify-between border-b border-sky-100 pb-2 no-print">
               <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                 <Printer className="w-4 h-4 text-sky-600" />
                 <span>Thermal Receipt & KRA eTIMS</span>
@@ -1400,7 +1402,7 @@ export const POSScreen: React.FC<POSScreenProps> = ({
             </div>
 
             {/* Receipt Paper Simulation (80mm Thermal Printer) */}
-            <div className="bg-slate-50 text-slate-900 p-4 rounded-xl font-mono text-[11px] shadow-inner space-y-2 border border-slate-200 select-text">
+            <div className="bg-slate-50 text-slate-900 p-4 rounded-xl font-mono text-[11px] shadow-inner space-y-2 border border-slate-200 select-text printable-receipt print:border-none print:bg-white print:p-0">
               <div className="text-center space-y-0.5 border-b border-dashed border-slate-400 pb-2">
                 <div className="font-extrabold text-xs">{defaultPrinterConfig.shopName}</div>
                 <div>{activeBranch.name}</div>
@@ -1485,7 +1487,7 @@ export const POSScreen: React.FC<POSScreenProps> = ({
             </div>
 
             {/* Receipt Modal Actions */}
-            <div className="flex items-center gap-2 pt-2">
+            <div className="flex items-center gap-2 pt-2 no-print">
               <button
                 onClick={() => window.print()}
                 className="flex-1 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-md cursor-pointer"
@@ -1498,11 +1500,12 @@ export const POSScreen: React.FC<POSScreenProps> = ({
                 className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 cursor-pointer"
                 title="View raw ESC/POS hex commands for hardware receipt printers"
               >
-
+                Raw ESC/POS
+              </button>
             </div>
 
             {showEscPosViewer && (
-              <pre className="bg-slate-900 text-emerald-400 p-3 rounded-lg font-mono text-[10px] overflow-x-auto max-h-40 border border-slate-800">
+              <pre className="bg-slate-900 text-emerald-400 p-3 rounded-lg font-mono text-[10px] overflow-x-auto max-h-40 border border-slate-800 no-print">
                 {generateEscPosHex(lastCompletedSale, activeBranch)}
               </pre>
             )}
@@ -1553,9 +1556,9 @@ export const POSScreen: React.FC<POSScreenProps> = ({
                           product: prod,
                           selectedUnit: it.unit,
                           quantity: it.soldQuantity,
-                          discountQuantity: it.discountQuantity || 0,
                           unitPrice: it.unitPrice,
-                          discount: it.discountAmount || 0,
+                          discountKsh: it.discountKsh || it.manualDiscountAmount || it.discountAmount || 0,
+                          lineDiscountAmount: it.lineDiscountAmount || 0,
                           taxRate: it.taxRate || 0.16
                         };
                       });

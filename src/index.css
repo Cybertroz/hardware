@@ -10,21 +10,96 @@
   }
 }
 
-/* Custom Dark Scrollbars */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #020617;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #cbd5e1;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #94a3b8;
+}
+
+/* ============================================================ */
+/* UNIVERSAL PRINT ENGINE FOR ALL PRINTABLE PAGES & MODALS      */
+/* ============================================================ */
+@media print {
+  /* Hide all navigation, action buttons, modals chrome, and search inputs */
+  .no-print,
+  header,
+  nav,
+  button:not(.allow-print),
+  input,
+  select {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Make fixed modal overlays expand cleanly without dark backdrops */
+  .fixed.inset-0 {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    display: block !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Clear drop shadows and borders that waste ink */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* 80mm Thermal Receipt formatting (POS receipt & Till Z-Report) */
+  .printable-receipt {
+    width: 80mm !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 6mm 4mm !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 0 !important;
+    font-family: monospace, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  }
+
+  /* Printable full-width reports and statements */
+  .printable-page,
+  main,
+  table {
+    background: #ffffff !important;
+    color: #000000 !important;
+    width: 100% !important;
+  }
+
+  /* Clean table borders and pagination in print */
+  table {
+    border-collapse: collapse !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+  }
+
+  th, td {
+    color: #000000 !important;
+    border-color: #cbd5e1 !important;
+  }
 }

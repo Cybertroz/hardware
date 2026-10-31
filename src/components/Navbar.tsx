@@ -76,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="bg-sky-600 text-white border-b border-sky-700 sticky top-0 z-40 shadow-md">
+    <header className="bg-sky-600 text-white border-b border-sky-700 sticky top-0 z-40 shadow-md no-print">
       {/* Top Banner: Branch, Center Brand, & Right Controls */}
       <div className="px-4 py-2 bg-sky-700/50 border-b border-sky-600 grid grid-cols-1 md:grid-cols-3 items-center text-xs gap-3">
         {/* Left: Branch & Role */}

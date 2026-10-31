@@ -10,7 +10,8 @@ import {
   DollarSign,
   ArrowRightLeft,
   CheckCircle2,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Printer
 } from 'lucide-react';
 import { Product, Branch, StockAdjustment, AdjustmentReason, User, FeatureFlags } from '../types/index.ts';
 import { formatKsh, formatDate } from '../utils/formatters.ts';
@@ -166,6 +167,15 @@ export const InventoryScreen: React.FC<InventoryScreenProps> = ({
           </div>
 
           <button
+            onClick={() => window.print()}
+            className="no-print px-3 py-1.5 bg-white border border-sky-300 hover:bg-sky-50 text-sky-700 rounded-lg text-xs font-bold flex items-center gap-1.5 transition shadow-2xs cursor-pointer"
+            title="Print inventory stock sheet"
+          >
+            <Printer className="w-3.5 h-3.5 text-sky-600" />
+            <span>Print Stock Sheet</span>
+          </button>
+
+          <button
             onClick={() => {
               setAdjustProductId(products[0]?.id || '');
               setAdjustQty(50);
@@ -174,7 +184,7 @@ export const InventoryScreen: React.FC<InventoryScreenProps> = ({
               setAdjustMessage(null);
               setShowAdjustModal(true);
             }}
-            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition shadow-2xs cursor-pointer"
+            className="no-print px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition shadow-2xs cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>+ Receive New Stock</span>

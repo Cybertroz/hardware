@@ -9,7 +9,8 @@ import {
   AlertCircle,
   FileSpreadsheet,
   CheckCircle2,
-  FileText
+  FileText,
+  Printer
 } from 'lucide-react';
 import { Sale, Product, Supplier, Customer, Branch, GoodsReceivedNote } from '../types/index.ts';
 import { formatKsh, formatDate } from '../utils/formatters.ts';
@@ -145,6 +146,15 @@ export const ReportsScreen: React.FC<ReportsScreenProps> = ({
             KRA 16% VAT Return
           </button>
         </div>
+
+        <button
+          onClick={() => window.print()}
+          className="no-print px-3.5 py-1.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow-xs cursor-pointer"
+          title="Print current report view"
+        >
+          <Printer className="w-3.5 h-3.5" />
+          <span>Print Report</span>
+        </button>
       </div>
 
       {/* KPI Summary Cards */}

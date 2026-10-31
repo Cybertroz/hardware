@@ -13,7 +13,8 @@ import {
   PieChart,
   Download,
   Lock,
-  CalendarCheck
+  CalendarCheck,
+  Printer
 } from 'lucide-react';
 import { Sale, Customer, Supplier, GoodsReceivedNote, Branch, User } from '../types/index.ts';
 
@@ -260,8 +261,17 @@ export const FinanceScreen: React.FC<FinanceScreenProps> = ({
               )}
 
               <button
+                onClick={() => window.print()}
+                className="no-print px-3.5 py-2 bg-white border border-sky-300 hover:bg-sky-50 text-sky-700 font-bold rounded-xl transition text-xs flex items-center gap-1.5 cursor-pointer shadow-xs"
+                title="Print financial statement or ledger"
+              >
+                <Printer className="w-4 h-4 text-sky-600" />
+                <span>Print Ledger</span>
+              </button>
+
+              <button
                 onClick={() => setShowAddExpense(true)}
-                className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition text-xs flex items-center gap-1.5 cursor-pointer shadow-md shadow-sky-600/20"
+                className="no-print px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition text-xs flex items-center gap-1.5 cursor-pointer shadow-md shadow-sky-600/20"
               >
                 <Plus className="w-4 h-4" />
                 <span>Log Operating Expense</span>

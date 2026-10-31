@@ -213,10 +213,13 @@ export interface SaleItem {
   unit: string;
   baseUnitQuantity: number; // e.g. 2 tonnes = 40 bags
   soldQuantity: number; // e.g. 2
-  discountKsh: number; // absolute amount in Ksh
+  discountKsh?: number; // absolute amount in Ksh
+  manualDiscountAmount?: number;
+  discountAmount?: number;
+  discountQuantity?: number;
   unitPrice: number; // price for this sold unit
   costPriceAtSale: number;
-  lineDiscountAmount: number;
+  lineDiscountAmount?: number;
   taxRate: number;
   taxAmount: number;
   total: number;
@@ -227,6 +230,9 @@ export interface CartItem {
   selectedUnit: string;
   quantity: number;
   discountKsh: number; // amount in Ksh
+  manualDiscountAmount?: number;
+  discountQuantity?: number;
+  discount?: number;
   unitPrice: number;
   lineDiscountAmount: number; // line discount
   taxRate: number;

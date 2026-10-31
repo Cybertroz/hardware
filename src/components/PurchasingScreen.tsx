@@ -7,7 +7,8 @@ import {
   CheckCircle,
   Clock,
   DollarSign,
-  AlertCircle
+  AlertCircle,
+  Printer
 } from 'lucide-react';
 import { Supplier, PurchaseOrder, GoodsReceivedNote, Product, Branch, User } from '../types/index.ts';
 import { formatKsh, formatDate } from '../utils/formatters.ts';
@@ -213,8 +214,17 @@ export const PurchasingScreen: React.FC<PurchasingScreenProps> = ({
           </div>
 
           <button
+            onClick={() => window.print()}
+            className="no-print px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold rounded-lg text-xs flex items-center gap-1.5 transition cursor-pointer"
+            title="Print purchasing orders or receipts"
+          >
+            <Printer className="w-4 h-4 text-amber-400" />
+            <span>Print List</span>
+          </button>
+
+          <button
             onClick={() => setShowPOModal(true)}
-            className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs flex items-center gap-1.5 transition shadow"
+            className="no-print px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs flex items-center gap-1.5 transition shadow"
           >
             <Plus className="w-4 h-4" />
             <span>New Purchase Order</span>

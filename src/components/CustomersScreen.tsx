@@ -9,7 +9,8 @@ import {
   FileText,
   Building,
   CheckCircle2,
-  Calendar
+  Calendar,
+  Printer
 } from 'lucide-react';
 import { Customer, Sale, User, Branch } from '../types/index.ts';
 import { formatKsh, formatDate, formatShortDate } from '../utils/formatters.ts';
@@ -317,7 +318,17 @@ export const CustomersScreen: React.FC<CustomersScreenProps> = ({
                   <FileText className="w-4 h-4 text-sky-600" />
                   <span>Customer Statement & Sales History</span>
                 </h3>
-                <span className="text-xs text-slate-500 font-medium">{customerSales.length} Transactions</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-slate-500 font-medium">{customerSales.length} Transactions</span>
+                  <button
+                    onClick={() => window.print()}
+                    className="no-print px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                    title="Print customer ledger and statement"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>Print Statement</span>
+                  </button>
+                </div>
               </div>
 
               {customerSales.length === 0 ? (

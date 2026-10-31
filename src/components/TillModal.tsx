@@ -66,8 +66,8 @@ export const TillModal: React.FC<TillModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white border border-sky-200 rounded-2xl w-full max-w-lg p-5 space-y-4 shadow-2xl text-slate-900">
+    <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 print:p-0 print:static print:bg-white">
+      <div className="bg-white border border-sky-200 rounded-2xl w-full max-w-lg p-5 space-y-4 shadow-2xl text-slate-900 printable-receipt print:border-none print:shadow-none print:p-0 print:max-w-full">
         <div className="flex justify-between items-center border-b border-sky-100 pb-2">
           <div>
             <h3 className="font-bold text-slate-900 text-sm">
@@ -77,7 +77,7 @@ export const TillModal: React.FC<TillModalProps> = ({
               Branch: {activeBranch.name} • Cashier: {activeTill?.cashierName || currentUser.name}
             </p>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 font-bold no-print">✕</button>
         </div>
 
         {/* Sales by Payment Method Breakdown */}
@@ -193,7 +193,7 @@ export const TillModal: React.FC<TillModalProps> = ({
           </div>
         </div>
 
-        <div>
+        <div className="no-print">
           <label className="text-slate-600 block text-xs mb-1">Supervisor Closing Notes:</label>
           <input
             type="text"
@@ -204,10 +204,10 @@ export const TillModal: React.FC<TillModalProps> = ({
           />
         </div>
 
-        <div className="flex gap-2 pt-2">
+        <div className="flex gap-2 pt-2 no-print">
           <button
             onClick={() => window.print()}
-            className="px-3.5 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+            className="px-3.5 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print Z-Report</span>
@@ -215,7 +215,7 @@ export const TillModal: React.FC<TillModalProps> = ({
           <button
             onClick={handleCloseTill}
             disabled={isClosing}
-            className="flex-1 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg text-xs transition shadow-xs disabled:opacity-50"
+            className="flex-1 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg text-xs transition shadow-xs disabled:opacity-50 cursor-pointer"
           >
             {isClosing ? 'Closing Till...' : 'Close Till & Lock Register'}
           </button>
