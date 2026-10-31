@@ -1158,7 +1158,7 @@ export const POSScreen: React.FC<POSScreenProps> = ({
                       type="number"
                       placeholder="Tendered"
                       value={cashTendered || ''}
-                      onChange={e => setCashTendered(parseFloat(e.target.value) || 0)}
+                      onChange={e => setCashTendered(e.target.value === '' ? 0 : parseFloat(e.target.value) || 0)}
                       className="w-32 bg-white border border-slate-300 rounded-md px-2 py-1.5 text-sky-800 font-bold text-right text-xs focus:outline-none focus:border-sky-500"
                       title="Customer Tendered Cash (For Change calculation)"
                     />
