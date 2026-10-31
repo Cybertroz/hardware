@@ -16,6 +16,7 @@ import {
   Wallet
 } from 'lucide-react';
 import { Branch, Role, FeatureFlags, TillSession } from '../types/index.ts';
+import { PWAInstallButton } from './PWAInstallButton.tsx';
 
 interface NavbarProps {
   activeTab: string;
@@ -161,6 +162,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>Sync ({offlineQueueCount})</span>
             </button>
           )}
+
+          {/* Install App Button for Android / Desktop */}
+          <PWAInstallButton />
 
           <button
             onClick={onLogout}
